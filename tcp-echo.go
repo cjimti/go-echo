@@ -1,31 +1,89 @@
 package main
 
 import (
-	"time"
+	"log"
+	"net"
+	"os"
 
-	"github.com/gin-gonic/gin"
+	"fmt"
+
 	"github.com/nu7hatch/gouuid"
 )
 
 func main() {
-	count := 1
+
+	// ENV
+	tcpPort := os.Getenv("TCP_PORT")
+	if tcpPort == "" {
+		tcpPort = "1025"
+	}
+
+	nodeName := os.Getenv("NODE_NAME")
+	podName := os.Getenv("POD_NAME")
+	podNamespace := os.Getenv("POD_NAMESPACE")
+	podIP := os.Getenv("POD_IP")
+	serviceAccountName := os.Getenv("SERVICE_ACCOUNT")
+
+	message := ""
+
+	if nodeName != "" {
+		message = message + fmt.Sprintf("Welcome, you are connected to node %s.\n", nodeName)
+	}
+
+	if podName != "" {
+		message = message + fmt.Sprintf("Running on Pod %s.", podName)
+	}
+
+	if podNamespace != "" {
+		message = message + fmt.Sprintf("With IP address %s.\n", podNamespace)
+	}
+
+	if podIP != "" {
+		message = message + fmt.Sprintf("With IP address %s.", podIP)
+	}
+
+	if serviceAccountName != "" {
+		message = message + fmt.Sprintf("Service %s.", serviceAccountName)
+	}
+
+	l, err := net.Listen("tcp", ":"+tcpPort)
+	if err != nil {
+		log.Panicln(err)
+	}
+
+	log.Println("Listening on TCP port", tcpPort)
+	defer l.Close()
+
+	for {
+		conn, err := l.Accept()
+		if err != nil {
+			log.Panicln(err)
+		}
+
+		go handleTCPRequest(conn, message)
+	}
+}
+
+func handleTCPRequest(conn net.Conn, message string) {
 	callUuidV4, _ := uuid.NewV4()
+	clientId := callUuidV4.String()
 
-	r := gin.Default()
-	r.GET("/", func(c *gin.Context) {
-		instanceUuidV4, _ := uuid.NewV4()
+	log.Println(clientId + " - TCP connection open.")
+	defer conn.Close()
+	defer log.Println(clientId + " - TCP connection closed.")
 
-		c.JSON(200, gin.H{
-			"message":       "ok",
-			"time":          time.Now(),
-			"count":         count,
-			"uuid_call":     instanceUuidV4.String(),
-			"uuid_instance": callUuidV4.String(),
-			"client_ip":     c.ClientIP(),
-			"version":       2,
-			"version_msg":   "version 2",
-		})
-		count++
-	})
-	r.Run() // listen and serve on 0.0.0.0:8080
+	conn.Write([]byte(message))
+
+	for {
+		buf := make([]byte, 1024)
+		size, err := conn.Read(buf)
+		if err != nil {
+			return
+		}
+		data := buf[:size]
+
+		log.Println(clientId+" - Received Raw Data:", data)
+		log.Printf(clientId+" - Received Data (converted to string): %s", data)
+		conn.Write(data)
+	}
 }
