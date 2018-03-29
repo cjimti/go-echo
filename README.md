@@ -2,7 +2,7 @@
 [![Docker Container Layers](https://shields.beevelop.com/docker/image/layers/cjimti/go-echo/latest.svg)](https://hub.docker.com/r/cjimti/go-echo/)
 [![Docker Container Pulls](https://img.shields.io/docker/pulls/cjimti/go-echo.svg)](https://hub.docker.com/r/cjimti/go-echo/)
 
-# GO ECHO
+# GO (TCP) Echo
 
 A Simple go TCP echo server. Written to learn and test [Kubernetes] TCP networking.
 
