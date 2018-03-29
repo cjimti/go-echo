@@ -31,19 +31,19 @@ func main() {
 	}
 
 	if podName != "" {
-		message = message + fmt.Sprintf("Running on Pod %s.", podName)
+		message = message + fmt.Sprintf("Running on Pod %s.\n", podName)
 	}
 
 	if podNamespace != "" {
-		message = message + fmt.Sprintf("With IP address %s.\n", podNamespace)
+		message = message + fmt.Sprintf("In namespace %s.\n", podNamespace)
 	}
 
 	if podIP != "" {
-		message = message + fmt.Sprintf("With IP address %s.", podIP)
+		message = message + fmt.Sprintf("With IP address %s.\n", podIP)
 	}
 
 	if serviceAccountName != "" {
-		message = message + fmt.Sprintf("Service %s.", serviceAccountName)
+		message = message + fmt.Sprintf("Service %s.\n", serviceAccountName)
 	}
 
 	l, err := net.Listen("tcp", ":"+tcpPort)

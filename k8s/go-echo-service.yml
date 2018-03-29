@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: "tcp-echo-service"
+  labels:
+    app: tcp-echo-service
+    system: example
+spec:
+  selector:
+    app: "tcp-echo"
+  ports:
+    - protocol: "TCP"
+      port: 2701
+      targetPort: 2701
+      nodePort: 32701 #port exposed on the node (cluster)
+  type: NodePort
