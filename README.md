@@ -1,6 +1,10 @@
+[![Docker Container Image Size](https://shields.beevelop.com/docker/image/image-size/cjimti/go-echo/latest.svg)](https://hub.docker.com/r/cjimti/go-echo/)
+[![Docker Container Layers](https://shields.beevelop.com/docker/image/layers/cjimti/go-echo/latest.svg)](https://hub.docker.com/r/cjimti/go-echo/)
+[![Docker Container Pulls](https://img.shields.io/docker/pulls/cjimti/go-echo.svg)](https://hub.docker.com/r/cjimti/go-echo/)
+
 # GO ECHO
 
-A Simple go TCP echo server. Written to learn and test [Kubernetes] networking.
+A Simple go TCP echo server. Written to learn and test [Kubernetes] TCP networking.
 
 ## Test with [Docker]
 
