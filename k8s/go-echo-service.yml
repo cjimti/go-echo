@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: "tcp-echo-service"
   labels:
-    app: tcp-echo-service
+    app: tcp-echo
     system: example
 spec:
   selector:
